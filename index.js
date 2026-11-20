@@ -1,35 +1,46 @@
 //Using express
 const express = require('express');
 const app = express();
+const cors  = require('cors');
 
 const userRoutes = require('./routes/userRoutes');  //route
 const postRoutes = require('./routes/postRoutes');  //route
+const registerRoutes = require('./routes/registerRoutes');
+const connectToDatabase = require('./db');
 
+app.use(cors());
+connectToDatabase();
 
-//Middlewares
-function middlewareToAddHellorWorldText(req, res, next){
-  res.customData = 'This sentence was added using Middleware!\n';
-  next();
-}
-
-function authenticate(req, res, next){
-  res.statusCode = 401;
-  res.write('Authentication Failed!');
-  res.end();
-}
-
-app.use('/users', middlewareToAddHellorWorldText, userRoutes);
-app.use('/posts', authenticate, postRoutes);
+app.use('/users', userRoutes);
+app.use('/posts', postRoutes);
+app.use('/register', registerRoutes);
 
 app.listen(3030, ()=>{
-  console.log('Server is running on https://localhost:3030');
+  console.log('Server is running on http://localhost:3030');
 });
+
 
 //Gyaan
 // index.js (The Base Paths & Rules): Defines the main resource categories (/users and /posts), attaches your middleware rule (middlewareToAddHellorWorldText), and opens port 3030 to the outside world.
 
 // userRoute.js & postRoute.js (The Actions): Define what actually happens when someone hits those paths with a GET or POST request, and what exact response (res.send(...)) gets exposed back to the caller.
 
+
+
+// Using Middlewares
+// function middlewareToAddHellorWorldText(req, res, next){
+//   res.customData = 'This sentence was added using Middleware!\n';
+//   next();
+// }
+
+// function authenticate(req, res, next){
+//   res.statusCode = 401;
+//   res.write('Authentication Failed!');
+//   res.end();
+// }
+
+// app.use('/users', middlewareToAddHellorWorldText, userRoutes);
+// app.use('/posts', authenticate, postRoutes);
 
 
 
