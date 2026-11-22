@@ -1,13 +1,15 @@
 //Handler
 const express = require('express');
+const {createPost, getPosts} = require('../controllers/postController'); 
+//destructure objects
 const router = express.Router(); 
 
 router.get('/', (req, res) => {
-  res.send('Hello World from POST');
+  getPosts(req, res);
 });
 
 router.post('/', (req, res) => {
-  res.send('Got a POST request from POST');
+  createPosts(req, res);
 });
 
 

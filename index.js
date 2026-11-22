@@ -1,17 +1,26 @@
+require('dotenv').config();
+
 //Using express
 const express = require('express');
 const app = express();
 const cors  = require('cors');
 
+const userRoute = require('./routes/userRoute'); //For userModel
+
+//Examples
 const userRoutes = require('./routes/userRoutes');  //route
 const postRoutes = require('./routes/postRoutes');  //route
 const registerRoutes = require('./routes/registerRoutes');
 const connectToDatabase = require('./db');
 
 app.use(cors());
-connectToDatabase();
+connectToDatabase();  
 
-app.use('/users', userRoutes);
+app.use(express.json());
+app.use('/user', userRoute);
+
+//Examples
+app.use('/users', userRoutes);  // '/users' we customised it
 app.use('/posts', postRoutes);
 app.use('/register', registerRoutes);
 

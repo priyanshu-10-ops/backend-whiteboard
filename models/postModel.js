@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const postsSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema({
   title: {
     type: String,          // The name must be a string
     required: true,        // This field is mandatory
@@ -49,5 +49,5 @@ postSchema.statics.getPosts = async function (title, content){
 }
 //We are teaching the future Model how to retrieve Posts
 
-const postsModel = mongoose.model('Posts', postsSchema); //Mongoose creates a Model using this Schema
+const postsModel = mongoose.model('Posts', postSchema); //Mongoose creates a Model using this Schema
 module.exports = postsModel;

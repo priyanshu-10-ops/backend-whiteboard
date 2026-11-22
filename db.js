@@ -1,7 +1,8 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 
-const username = 'priyanshudevops10_db_user';
-const password = 'ZAhR8p5mGOk5n0oC';
+const username = process.env.DB_USERNAME;
+const password = process.env.DB_PASSWORD;
 
 const connectionString = `mongodb+srv://${username}:${password}@cluster0.bcqxh9z.mongodb.net/`;
 
@@ -15,3 +16,4 @@ const connectToDatabase = async () => {
 };
 
 module.exports = connectToDatabase;
+
