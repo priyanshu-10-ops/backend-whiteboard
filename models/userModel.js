@@ -1,5 +1,6 @@
 const mongoose = require('mongoose'); //Import Mongoose
 const bcrypt = require('bcrypt'); //Import brcrypt for password hashing
+const validator = require('validator'); //Import validator for email and password validation
 
 //Create Schema
 const userSchema = new mongoose.Schema({
@@ -31,28 +32,43 @@ const userSchema = new mongoose.Schema({
 // Save that document in MongoDB.
 // Return the newly created user.
 
+
 userSchema.statics.register = async function (name, email, password) {
   try {
-    // Generate salt (10 rounds)
+
+    // 1. Check if email is valid
+    if (!validator.isEmail(email)) {
+      throw new Error('Please enter a valid email');
+    }
+
+    // 2. Check password strength
+    if (!validator.isStrongPassword(password)) {
+      throw new Error('Password is not strong enough');
+    }
+
+    // 3. Generate salt (10 rounds)
     const salt = await bcrypt.genSalt(10);
 
-    // Hash the password using the generated salt
+    // 4. Hash the password using the generated salt
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create a new user with the hashed password
+    // 5. Create a new user with the hashed password
     const user = new this({
       name,
       email,
       password: hashedPassword
     });
 
+    // 6. Save user in database
     const newUser = await user.save();
+
     return newUser;
 
   } catch (error) {
     throw new Error('Error registering user: ' + error.message);
   }
 };
+
 
 userSchema.statics.getUsers = async function (){
   try{
