@@ -11,8 +11,45 @@ const registerUser = async(req, res) => {
   }
 }
 
+
+const loginUser = async (req, res) => {
+  try {
+    // Extract email and password
+    const { email, password } = req.body;
+
+    // Validate input fields
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "All fields are required"
+      });
+    }
+
+    // Authenticate user through model method
+    const user = await userModel.login(email, password);
+
+    // Return successful response
+    res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt
+      }
+    });
+
+  } catch (error) {
+    res.status(401).json({
+      message: error.message
+    });
+  }
+};
+
+
+
 module.exports = {
-  registerUser
+  registerUser,
+  loginUser
 }
 
 //This means we're exporting an object containing a property called registerUser

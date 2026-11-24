@@ -80,18 +80,30 @@ userSchema.statics.getUsers = async function (){
   }
 }
 
-userSchema.statics.login = async function (email, password){
-  try{
-    const user = await this.findOne({email, password});
-    if(!user){
+
+userSchema.statics.login = async function (email, password) {
+  try {
+    // Find user using email
+    const user = await this.findOne({ email });
+
+    if (!user) {
       throw new Error('Invalid Login Credentials');
     }
+
+    // Compare entered password with stored hashed password
+    const auth = await bcrypt.compare(password, user.password);
+
+    if (!auth) {
+      throw new Error('Invalid Login Credentials');
+    }
+
     return user;
-  } 
-  catch (error){
-    throw new Error('Error Logging in ' + error.message);  
   }
-}
+  catch (error) {
+    throw new Error('Error Logging in: ' + error.message);
+  }
+};
+
 
 
 //Create a model
