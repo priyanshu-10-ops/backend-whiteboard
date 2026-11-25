@@ -70,9 +70,9 @@ userSchema.statics.register = async function (name, email, password) {
 };
 
 
-userSchema.statics.getUsers = async function (){
+userSchema.statics.getUser = async function (email){
   try{
-    const users = await this.find();
+    const users = await this.findOne({email});
     return users;
   }
   catch (error) {
