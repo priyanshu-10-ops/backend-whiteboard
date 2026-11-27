@@ -6,6 +6,7 @@ const app = express();
 const cors  = require('cors');
 
 const userRoute = require('./routes/userRoute'); //For userModel
+const canvasRoute= require('./routes/canvasRoute'); 
 
 //Examples
 const userRoutes = require('./routes/userRoutes');  //route
@@ -17,7 +18,8 @@ app.use(cors());
 connectToDatabase();  
 
 app.use(express.json());
-app.use('/user', userRoute);
+app.use('api/user', userRoute);
+app.use('api/canvases', canvasRoute);
 
 //Examples
 app.use('/users', userRoutes);  // '/users' we customised it

@@ -74,10 +74,47 @@ const canvasSchema = new mongoose.Schema({
     timestamps: true
 });
 
+
+//To get all canvases for a user
+userSchema.statics.getAllCanvases = async function(email) {
+    const user = await this.findOne({ email });
+    if (!user) {
+        throw new Error("User not found");
+    }
+    const canvases = await Canvas.find({
+        $or: [
+            { owner: user._id },
+            { shared_with: user._id }
+        ]
+    }).sort({ updatedAt: -1 });
+    return canvases;
+};
+
+
 // Indexes for faster queries
 canvasSchema.index({ owner: 1, updatedAt: -1 });
 canvasSchema.index({ 'shared_with.user': 1 });
 
 const Canvas = mongoose.model('Canvas', canvasSchema);
-
 module.exports = Canvas;
+
+
+// Get all personal and shared canvases for a user
+// userSchema.statics.getAllCanvases = async function(email) {
+
+//     const user = await this.findOne({ email });
+
+//     if (!user) {
+//         throw new Error("User not found");
+//     }
+
+//     const canvases = await Canvas.find({
+//         isDeleted: false,
+//         $or: [
+//             { owner: user._id },
+//             { 'shared_with.user': user._id }
+//         ]
+//     }).sort({ updatedAt: -1 });
+
+//     return canvases;
+// };
